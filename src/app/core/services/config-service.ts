@@ -1,0 +1,28 @@
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Config } from '../../shared/types/config';
+import { firstValueFrom } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ConfigService {
+  private readonly http = inject(HttpClient);
+  private _config?: Config;
+
+  get config(): Config {
+    if (!this._config) {
+      throw new Error('Config not loaded');
+    }
+    return this._config;
+  }
+
+  async load(): Promise<void> {
+    await firstValueFrom(this.http.get<Config>('/client/config'))
+      .then((config: Config) => (this._config = config))
+      .catch((error) => {
+        console.error('Failed to load config:', error);
+        throw error;
+      });
+  }
+}
