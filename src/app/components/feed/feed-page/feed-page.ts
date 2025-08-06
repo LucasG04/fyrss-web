@@ -1,12 +1,12 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ArticleService } from '../../../core/services/article-service';
 import { Article } from '../../../shared/types/article';
 import { firstValueFrom } from 'rxjs';
-import { FeedCard } from '../feed-card/feed-card';
+import { ArticleCard } from '../../../shared/components/article-card/article-card';
 
 @Component({
   selector: 'app-feed-page',
-  imports: [FeedCard],
+  imports: [ArticleCard],
   templateUrl: './feed-page.html',
   styleUrl: './feed-page.css',
 })

@@ -1,18 +1,28 @@
 <div class="bg-white rounded-lg shadow-md p-6 mx-auto">
   <div class="flex justify-between items-start">
-    <div>
-      <h2 class="text-xl font-bold mb-2">{{ article().title }}</h2>
-      <p class="text-gray-700 mb-4">{{ article().description }}</p>
-      <a
-        href="{{ article().sourceUrl }}"
-        target="_blank"
-        class="text-blue-600 hover:underline mb-2 block"
-        >{{ sourceUrlShort() }}</a
-      >
-      <div class="text-sm text-gray-500 mb-2">
-        Published: {{ getDateFromUtc(article().publishedAt) }}
+    <div class="w-full">
+      <h2 class="text-xl font-bold">{{ article().title }}</h2>
+      <p class="text-gray-700 mb-2">{{ article().description }}</p>
+      <div class="flex justify-between items-center gap-2 mb-2">
+        <div class="flex items-center gap-2">
+          <img
+            class="rotate-[-45deg]"
+            ngSrc="/link.svg"
+            height="16"
+            width="16"
+          />
+          <a
+            href="{{ article().sourceUrl }}"
+            target="_blank"
+            class="text-sm text-blue-600 hover:underline block"
+            >{{ sourceUrlShort() }}</a
+          >
+        </div>
+        <div class="text-sm text-gray-500">
+          {{ getDateFromUtc(article().publishedAt) }}
+        </div>
       </div>
-      <div class="flex flex-wrap gap-2 mb-4">
+      <div class="flex flex-wrap gap-2">
         @for (tag of article().tags; track tag) {
         <span
           class="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs"
