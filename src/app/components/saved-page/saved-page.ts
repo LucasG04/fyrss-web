@@ -1,28 +1,28 @@
-import { AfterViewInit, Component, inject, signal } from '@angular/core';
-import { ArticleService } from '../../../core/services/article-service';
-import { Article } from '../../../shared/types/article';
-import { filter, firstValueFrom, fromEvent } from 'rxjs';
-import { ArticleCard } from '../../../shared/components/article-card/article-card';
+import { Component, inject, signal } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Loader } from '../../../shared/components/loader/loader';
+import { fromEvent, filter, firstValueFrom } from 'rxjs';
+import { ArticleService } from '../../core/services/article-service';
+import { Article } from '../../shared/types/article';
+import { ArticleCard } from '../../shared/components/article-card/article-card';
+import { Loader } from '../../shared/components/loader/loader';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-feed-page',
+  selector: 'app-saved-page',
   imports: [ArticleCard, Loader],
-  templateUrl: './feed-page.html',
-  styleUrl: './feed-page.css',
+  templateUrl: './saved-page.html',
+  styleUrl: './saved-page.css',
 })
-export class FeedPage implements AfterViewInit {
+export class SavedPage {
   private readonly articleService = inject(ArticleService);
 
   articles = signal<Article[]>([]);
   isLoading = signal<boolean>(true);
 
   constructor() {
-    this.getFeed(0, 20)
+    this.getSaved(0, 20)
       .then((articles) => this.articles.set(articles))
-      .catch((error) => console.error('Error loading feed:', error))
+      .catch((error) => console.error('Error loading saved:', error))
       .finally(() => this.isLoading.set(false));
   }
 
@@ -40,7 +40,7 @@ export class FeedPage implements AfterViewInit {
 
         if (scrollPosition >= documentHeight - 100 && !this.isLoading()) {
           this.isLoading.set(true);
-          const next = await this.getFeed(
+          const next = await this.getSaved(
             this.articles().length,
             this.articles().length + 20
           );
@@ -65,7 +65,7 @@ export class FeedPage implements AfterViewInit {
     firstValueFrom(this.articleService.markAsRead(articleId));
   }
 
-  private async getFeed(from: number, to: number): Promise<Article[]> {
-    return firstValueFrom(this.articleService.getFeed(from, to));
+  private async getSaved(from: number, to: number): Promise<Article[]> {
+    return firstValueFrom(this.articleService.getSaved(from, to));
   }
 }

@@ -12,9 +12,10 @@
             width="16"
           />
           <a
+            class="text-sm text-blue-600 hover:underline block"
             href="{{ article().sourceUrl }}"
             target="_blank"
-            class="text-sm text-blue-600 hover:underline block"
+            (click)="onLinkOpen.emit()"
             >{{ sourceUrlShort() }}</a
           >
         </div>
@@ -34,11 +35,13 @@
     <button
       class="ml-4 bg-gray-100 hover:bg-gray-200 rounded-full p-2"
       title="Save"
+      (click)="onSaveChange.emit(!article().save)"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="h-5 w-5 text-gray-600"
-        fill="none"
+        class="h-5 w-5"
+        [class]="article().save ? 'text-amber-300' : 'text-gray-600'"
+        [attr.fill]="article().save ? 'currentColor' : 'none'"
         viewBox="0 0 24 24"
         stroke="currentColor"
       >

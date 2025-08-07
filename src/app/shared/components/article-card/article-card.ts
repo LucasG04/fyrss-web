@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { Article } from '../../types/article';
 import { NgOptimizedImage } from '@angular/common';
 
@@ -10,6 +10,9 @@ import { NgOptimizedImage } from '@angular/common';
 })
 export class ArticleCard {
   article = input.required<Article>();
+
+  onSaveChange = output<boolean>();
+  onLinkOpen = output<void>();
 
   sourceUrlShort = computed<string>(() => {
     const urlString = this.article().sourceUrl;

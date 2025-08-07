@@ -17,4 +17,31 @@ export class ArticleService {
       `${apiUrl}/articles/feed?from=${from}&to=${to}`
     );
   }
+
+  getHistory(from: number, to: number): Observable<Article[]> {
+    const apiUrl = this.configService.config.apiUrl;
+    return this.http.get<Article[]>(
+      `${apiUrl}/articles/history?from=${from}&to=${to}`
+    );
+  }
+
+  getSaved(from: number, to: number): Observable<Article[]> {
+    const apiUrl = this.configService.config.apiUrl;
+    return this.http.get<Article[]>(
+      `${apiUrl}/articles/saved?from=${from}&to=${to}`
+    );
+  }
+
+  markAsRead(articleId: string): Observable<void> {
+    const apiUrl = this.configService.config.apiUrl;
+    return this.http.patch<void>(`${apiUrl}/articles/${articleId}/read`, null);
+  }
+
+  updateArticleSaved(articleId: string, save: boolean): Observable<void> {
+    const apiUrl = this.configService.config.apiUrl;
+    return this.http.patch<void>(
+      `${apiUrl}/articles/${articleId}/saved?saved=${save}`,
+      null
+    );
+  }
 }
