@@ -1,0 +1,34 @@
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Angular build output
+dist
+.tmp
+out-tsc
+
+# Environment files
+.env
+.env.*.local
+
+# Editor & OS
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# Git & CI
+.git
+.gitignore
+.gitattributes
+.github
+
+# Docker build cache dirs
+.buildx-cache
+
+# Logs
+*.log
+
+# Tests & coverage
+coverage
