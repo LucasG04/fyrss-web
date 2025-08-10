@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Config } from '../../shared/types/config';
 import { firstValueFrom } from 'rxjs';
-import { isPlatformServer } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -20,10 +19,7 @@ export class ConfigService {
   }
 
   async load(): Promise<void> {
-    if (isPlatformServer(this.platformId)) {
-      return;
-    }
-    await firstValueFrom(this.http.get<Config>('/client/config'))
+    await firstValueFrom(this.http.get<Config>('/config'))
       .then((config: Config) => (this._config = config))
       .catch((error) => {
         console.error('Failed to load config:', error);

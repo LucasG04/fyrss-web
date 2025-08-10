@@ -10,37 +10,36 @@ import { Observable } from 'rxjs';
 export class ArticleService {
   private readonly configService = inject(ConfigService);
   private readonly http = inject(HttpClient);
+  private readonly apiUrl = this.configService.config.apiUrl;
 
   getFeed(from: number, to: number): Observable<Article[]> {
-    const apiUrl = this.configService.config.apiUrl;
     return this.http.get<Article[]>(
-      `${apiUrl}/articles/feed?from=${from}&to=${to}`
+      `${this.apiUrl}/articles/feed?from=${from}&to=${to}`
     );
   }
 
   getHistory(from: number, to: number): Observable<Article[]> {
-    const apiUrl = this.configService.config.apiUrl;
     return this.http.get<Article[]>(
-      `${apiUrl}/articles/history?from=${from}&to=${to}`
+      `${this.apiUrl}/articles/history?from=${from}&to=${to}`
     );
   }
 
   getSaved(from: number, to: number): Observable<Article[]> {
-    const apiUrl = this.configService.config.apiUrl;
     return this.http.get<Article[]>(
-      `${apiUrl}/articles/saved?from=${from}&to=${to}`
+      `${this.apiUrl}/articles/saved?from=${from}&to=${to}`
     );
   }
 
   markAsRead(articleId: string): Observable<void> {
-    const apiUrl = this.configService.config.apiUrl;
-    return this.http.patch<void>(`${apiUrl}/articles/${articleId}/read`, null);
+    return this.http.patch<void>(
+      `${this.apiUrl}/articles/${articleId}/read`,
+      null
+    );
   }
 
   updateArticleSaved(articleId: string, save: boolean): Observable<void> {
-    const apiUrl = this.configService.config.apiUrl;
     return this.http.patch<void>(
-      `${apiUrl}/articles/${articleId}/saved?saved=${save}`,
+      `${this.apiUrl}/articles/${articleId}/saved?saved=${save}`,
       null
     );
   }

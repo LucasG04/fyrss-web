@@ -12,7 +12,7 @@ const browserDistFolder = join(import.meta.dirname, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-app.get('/client/config', (req, res) => {
+app.get('/config', (req, res) => {
   res.json({
     apiUrl: process.env['API_URL'] ?? '/api',
   });

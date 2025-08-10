@@ -22,9 +22,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
-    provideAppInitializer(async () => {
-      const configService = inject(ConfigService);
-      await configService.load();
-    }),
+    provideAppInitializer(() => inject(ConfigService).load()),
   ],
 };
