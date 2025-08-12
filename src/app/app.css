@@ -8,6 +8,6 @@
   }
 
   &.router-link-active {
-    color: var(--color-blue-900);
+    color: var(--color-primary);
   }
 }
