@@ -19,5 +19,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/saved-page/saved-page').then((m) => m.SavedPage),
   },
+  {
+    path: 'tags',
+    loadComponent: () =>
+      import('./components/tags-page/tags-page').then((m) => m.TagsPage),
+  },
   { path: '**', redirectTo: '' },
 ];
