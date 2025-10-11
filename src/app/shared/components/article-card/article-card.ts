@@ -1,10 +1,9 @@
 import { Component, computed, input, output } from '@angular/core';
 import { Article } from '../../types/article';
-import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-article-card',
-  imports: [NgOptimizedImage],
+  imports: [],
   templateUrl: './article-card.html',
   styleUrl: './article-card.css',
 })
