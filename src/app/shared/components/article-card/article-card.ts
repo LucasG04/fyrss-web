@@ -14,8 +14,10 @@ export class ArticleCard {
   onLinkOpen = output<void>();
 
   hasLastReadAt = computed<boolean>(() => {
-    const startOf2025 = new Date('2025-01-01T00:00:00Z');
-    return new Date(this.article().lastReadAt) > startOf2025;
+    const startOf2000 = new Date('2000-01-01T00:00:00Z');
+    // Backend default date is 1970-01-01
+    // If lastReadAt is after 2000, consider it as "has been read"
+    return new Date(this.article().lastReadAt) > startOf2000;
   });
   sourceUrlShort = computed<string>(() => {
     const urlString = this.article().sourceUrl;

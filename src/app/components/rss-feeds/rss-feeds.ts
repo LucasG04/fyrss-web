@@ -122,7 +122,7 @@ export class RssFeeds {
       setTimeout(() => this.success.set(null), 3000);
     } catch (err: any) {
       let message = 'Failed to save RSS feed';
-      if (err && err.error && err) {
+      if (err && err.error) {
         message += `: ${err.error}`;
       }
       this.error.set(message);
