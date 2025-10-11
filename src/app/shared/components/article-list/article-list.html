@@ -6,6 +6,8 @@
     (onSaveChange)="updateArticleSaved(article.id, $event)"
     (onLinkOpen)="markAsRead(article.id)"
   />
+  } @empty {
+  <p class="text-gray-500">No articles found.</p>
   } @if (isLoading()) {
   <app-loader />
   }

@@ -8,6 +8,13 @@ export const routes: Routes = [
       import('./components/feed/feed-page/feed-page').then((m) => m.FeedPage),
   },
   {
+    path: 'feed/:id',
+    loadComponent: () =>
+      import('./components/feed/feed-articles/feed-articles').then(
+        (m) => m.FeedArticles
+      ),
+  },
+  {
     path: 'history',
     loadComponent: () =>
       import('./components/history-page/history-page').then(

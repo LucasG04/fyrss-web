@@ -16,6 +16,10 @@ export class RssFeedService {
     return this.http.get<RssFeed[]>(`${this.apiUrl}/feeds`);
   }
 
+  getById(id: string): Observable<RssFeed> {
+    return this.http.get<RssFeed>(`${this.apiUrl}/feeds/${id}`);
+  }
+
   create(feed: Omit<RssFeed, 'id'>): Observable<RssFeed> {
     return this.http.post<RssFeed>(`${this.apiUrl}/feeds`, feed);
   }

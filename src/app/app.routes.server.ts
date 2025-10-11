@@ -10,6 +10,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Server,
   },
   {
+    path: 'feed/:id',
+    renderMode: RenderMode.Client,
+  },
+  {
     path: 'history',
     renderMode: RenderMode.Server,
   },

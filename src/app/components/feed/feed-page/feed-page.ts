@@ -4,6 +4,7 @@ import { Article } from '../../../shared/types/article';
 import { firstValueFrom, take } from 'rxjs';
 import { RssFeedService } from '../../../core/services/rss-feed-service';
 import { RssFeed } from '../../../shared/types/rss-feed';
+import { Router } from '@angular/router';
 
 interface RssFeedWithArticles extends RssFeed {
   articles: Article[];
@@ -18,6 +19,7 @@ interface RssFeedWithArticles extends RssFeed {
 export class FeedPage {
   private readonly articleService = inject(ArticleService);
   private readonly feedService = inject(RssFeedService);
+  private readonly router = inject(Router);
 
   feeds = signal<RssFeedWithArticles[]>([]);
 
@@ -37,5 +39,9 @@ export class FeedPage {
         }));
         this.feeds.set(feedsWithArticles);
       });
+  }
+
+  goToFeed(feedId: string): void {
+    this.router.navigate(['/feed', feedId]);
   }
 }

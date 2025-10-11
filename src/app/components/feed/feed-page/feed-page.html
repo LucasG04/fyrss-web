@@ -1,6 +1,6 @@
 <div class="flex flex-col items-center justify-center gap-4 mx-4">
   @for (feed of feeds(); track feed.id) {
-  <div class="max-w-5xl w-full">
+  <div class="max-w-5xl w-full" (click)="goToFeed(feed.id)">
     <div class="bg-white rounded-lg shadow-md p-3 mx-auto w-full">
       <div class="flex justify-between items-center">
         <h1 class="text-lg font-bold">{{ feed.name }}</h1>
