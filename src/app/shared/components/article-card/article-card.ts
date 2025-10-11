@@ -1,10 +1,9 @@
 import { Component, computed, input, output } from '@angular/core';
 import { Article } from '../../types/article';
-import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-article-card',
-  imports: [NgOptimizedImage],
+  imports: [],
   templateUrl: './article-card.html',
   styleUrl: './article-card.css',
 })
@@ -14,6 +13,12 @@ export class ArticleCard {
   onSaveChange = output<boolean>();
   onLinkOpen = output<void>();
 
+  hasLastReadAt = computed<boolean>(() => {
+    const startOf2000 = new Date('2000-01-01T00:00:00Z');
+    // Backend default date is 1970-01-01
+    // If lastReadAt is after 2000, consider it as "has been read"
+    return new Date(this.article().lastReadAt) > startOf2000;
+  });
   sourceUrlShort = computed<string>(() => {
     const urlString = this.article().sourceUrl;
     if (!urlString) return '';

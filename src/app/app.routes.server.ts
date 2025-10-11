@@ -10,6 +10,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Server,
   },
   {
+    path: 'feed/:id',
+    renderMode: RenderMode.Client,
+  },
+  {
     path: 'history',
     renderMode: RenderMode.Server,
   },
@@ -18,7 +22,7 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Server,
   },
   {
-    path: 'tags',
+    path: 'rss-feeds',
     renderMode: RenderMode.Server,
   },
   {

@@ -12,9 +12,13 @@ export class ArticleService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = this.configService.config.apiUrl;
 
-  getFeed(from: number, to: number): Observable<Article[]> {
+  getPaginatedFeed(
+    feedId: string,
+    from: number,
+    to: number
+  ): Observable<Article[]> {
     return this.http.get<Article[]>(
-      `${this.apiUrl}/articles/feed?from=${from}&to=${to}`
+      `${this.apiUrl}/feeds/${feedId}/paginated?from=${from}&to=${to}`
     );
   }
 

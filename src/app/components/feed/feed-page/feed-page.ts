@@ -1,19 +1,47 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ArticleService } from '../../../core/services/article-service';
 import { Article } from '../../../shared/types/article';
-import { firstValueFrom } from 'rxjs';
-import { ArticleList } from '../../../shared/components/article-list/article-list';
+import { firstValueFrom, take } from 'rxjs';
+import { RssFeedService } from '../../../core/services/rss-feed-service';
+import { RssFeed } from '../../../shared/types/rss-feed';
+import { Router } from '@angular/router';
+
+interface RssFeedWithArticles extends RssFeed {
+  articles: Article[];
+}
 
 @Component({
   selector: 'app-feed-page',
-  imports: [ArticleList],
+  imports: [],
   templateUrl: './feed-page.html',
   styleUrl: './feed-page.css',
 })
 export class FeedPage {
   private readonly articleService = inject(ArticleService);
+  private readonly feedService = inject(RssFeedService);
+  private readonly router = inject(Router);
 
-  getFeed = async (from: number, to: number): Promise<Article[]> => {
-    return firstValueFrom(this.articleService.getFeed(from, to));
-  };
+  feeds = signal<RssFeedWithArticles[]>([]);
+
+  constructor() {
+    this.feedService
+      .getAll()
+      .pipe(take(1))
+      .subscribe(async (feeds) => {
+        const articles = await Promise.all(
+          feeds.map((feed) =>
+            firstValueFrom(this.articleService.getPaginatedFeed(feed.id, 0, 4))
+          )
+        );
+        const feedsWithArticles = feeds.map((feed, index) => ({
+          ...feed,
+          articles: articles[index],
+        }));
+        this.feeds.set(feedsWithArticles);
+      });
+  }
+
+  goToFeed(feedId: string): void {
+    this.router.navigate(['/feed', feedId]);
+  }
 }

@@ -1,0 +1,109 @@
+/* Additional custom styles for RSS feeds management */
+
+.feed-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.feed-card:hover {
+  transform: translateY(-2px);
+}
+
+.form-input {
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-input:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.action-button {
+  transition: all 0.15s ease-in-out;
+}
+
+.action-button:hover {
+  transform: scale(1.05);
+}
+
+/* Custom scrollbar for long URLs */
+.url-text {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.url-text::-webkit-scrollbar {
+  height: 4px;
+}
+
+.url-text::-webkit-scrollbar-track {
+  background: #f7fafc;
+  border-radius: 2px;
+}
+
+.url-text::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 2px;
+}
+
+.url-text::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+/* Loading spinner animation enhancement */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Modal backdrop animation */
+.modal-backdrop {
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  animation: slideIn 0.15s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Focus states for accessibility */
+.focus\:ring-red:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Error state styling */
+.error-border {
+  border-color: #f56565;
+  box-shadow: 0 0 0 1px #f56565;
+}
+
+/* Success state for form fields */
+.success-border {
+  border-color: #48bb78;
+  box-shadow: 0 0 0 1px #48bb78;
+}

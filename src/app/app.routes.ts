@@ -8,6 +8,13 @@ export const routes: Routes = [
       import('./components/feed/feed-page/feed-page').then((m) => m.FeedPage),
   },
   {
+    path: 'feed/:id',
+    loadComponent: () =>
+      import('./components/feed/feed-articles/feed-articles').then(
+        (m) => m.FeedArticles
+      ),
+  },
+  {
     path: 'history',
     loadComponent: () =>
       import('./components/history-page/history-page').then(
@@ -20,9 +27,9 @@ export const routes: Routes = [
       import('./components/saved-page/saved-page').then((m) => m.SavedPage),
   },
   {
-    path: 'tags',
+    path: 'rss-feeds',
     loadComponent: () =>
-      import('./components/tags-page/tags-page').then((m) => m.TagsPage),
+      import('./components/rss-feeds/rss-feeds').then((m) => m.RssFeeds),
   },
   { path: '**', redirectTo: '' },
 ];

@@ -6,6 +6,14 @@
     (onSaveChange)="updateArticleSaved(article.id, $event)"
     (onLinkOpen)="markAsRead(article.id)"
   />
+  } @empty {
+  <div class="text-center py-6">
+    <i
+      class="eva eva-radio mx-auto text-gray-400 mb-4"
+      style="font-size: x-large"
+    ></i>
+    <h3 class="text-lg font-medium text-gray-500 mb-2">No articles found</h3>
+  </div>
   } @if (isLoading()) {
   <app-loader />
   }

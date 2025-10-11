@@ -68,9 +68,9 @@
         <li>
           <a
             class="router-link md:p-0"
-            routerLink="/tags"
+            routerLink="/rss-feeds"
             routerLinkActive="router-link-active"
-            >Tags</a
+            >RSS Feeds</a
           >
         </li>
       </ul>
@@ -79,5 +79,7 @@
 </nav>
 
 @if (configLoaded()) {
-<router-outlet />
+<div class="mb-4">
+  <router-outlet />
+</div>
 }

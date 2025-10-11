@@ -1,0 +1,10 @@
+@if (rssFeed()) {
+<div class="mx-4 mb-4 flex flex-col">
+  <div class="flex justify-between items-center">
+    <h1 class="text-xl font-bold">{{ rssFeed()!.name }}</h1>
+    <p class="text-gray-500">{{ rssFeed()!.articleCount }}</p>
+  </div>
+</div>
+}
+
+<app-article-list [getArticles]="getFeed" />
