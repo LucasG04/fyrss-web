@@ -13,6 +13,10 @@ export class ArticleCard {
   onSaveChange = output<boolean>();
   onLinkOpen = output<void>();
 
+  hasLastReadAt = computed<boolean>(() => {
+    const startOf2025 = new Date('2025-01-01T00:00:00Z');
+    return new Date(this.article().lastReadAt) > startOf2025;
+  });
   sourceUrlShort = computed<string>(() => {
     const urlString = this.article().sourceUrl;
     if (!urlString) return '';
