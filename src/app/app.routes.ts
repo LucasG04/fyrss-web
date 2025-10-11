@@ -20,9 +20,9 @@ export const routes: Routes = [
       import('./components/saved-page/saved-page').then((m) => m.SavedPage),
   },
   {
-    path: 'tags',
+    path: 'rss-feeds',
     loadComponent: () =>
-      import('./components/tags-page/tags-page').then((m) => m.TagsPage),
+      import('./components/rss-feeds/rss-feeds').then((m) => m.RssFeeds),
   },
   { path: '**', redirectTo: '' },
 ];

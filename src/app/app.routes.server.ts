@@ -18,7 +18,7 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Server,
   },
   {
-    path: 'tags',
+    path: 'rss-feeds',
     renderMode: RenderMode.Server,
   },
   {

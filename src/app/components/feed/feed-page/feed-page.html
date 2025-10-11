@@ -1,1 +1,16 @@
-<app-article-list [getArticles]="getFeed" />
+<div class="flex flex-col items-center justify-center gap-4 mx-4">
+  @for (feed of feeds(); track feed.id) {
+  <div class="max-w-5xl w-full">
+    <div class="bg-white rounded-lg shadow-md p-3 mx-auto w-full">
+      <div class="flex justify-between items-center">
+        <h1 class="text-lg font-bold">{{ feed.name }}</h1>
+      </div>
+      <div class="bg-gray-100 rounded-md w-full p-3 flex flex-col gap-1.5">
+        @for (article of feed.articles; track article.id) {
+        <p class="font-mono text-xs truncate w-full">{{ article.title }}</p>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</div>

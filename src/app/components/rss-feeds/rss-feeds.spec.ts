@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TagsPage } from './tags-page';
+import { RssFeeds } from './rss-feeds';
 
-describe('TagsPage', () => {
-  let component: TagsPage;
-  let fixture: ComponentFixture<TagsPage>;
+describe('RssFeeds', () => {
+  let component: RssFeeds;
+  let fixture: ComponentFixture<RssFeeds>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TagsPage]
+      imports: [RssFeeds]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TagsPage);
+    fixture = TestBed.createComponent(RssFeeds);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
