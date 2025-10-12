@@ -6,7 +6,7 @@
     <button
       class="ml-4 bg-gray-100 hover:bg-gray-200 transition-colors rounded-full p-2 flex items-center justify-center"
       title="Save"
-      (click)="onSaveChange.emit(!article().save)"
+      (click)="updateArticleSaved()"
     >
       <i
         class="eva"

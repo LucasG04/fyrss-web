@@ -1,11 +1,10 @@
 <div class="flex flex-col items-center justify-center gap-4 mx-4">
+  @if (isLoading()) {
+  <app-loader />
+  } @else {
+  <!--Article cards -->
   @for (article of articles(); track article.id) {
-  <app-article-card
-    class="max-w-5xl w-full"
-    [article]="article"
-    (onSaveChange)="updateArticleSaved(article.id, $event)"
-    (onLinkOpen)="markAsRead(article.id)"
-  />
+  <app-article-card class="max-w-5xl w-full" [article]="article" />
   } @empty {
   <div class="text-center py-6">
     <i
@@ -14,7 +13,5 @@
     ></i>
     <h3 class="text-lg font-medium text-gray-500 mb-2">No articles found</h3>
   </div>
-  } @if (isLoading()) {
-  <app-loader />
-  }
+  } }
 </div>

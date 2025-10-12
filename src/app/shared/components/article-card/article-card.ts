@@ -1,4 +1,4 @@
-import { Component, computed, inject, model, output } from '@angular/core';
+import { Component, computed, inject, model } from '@angular/core';
 import { Article } from '../../types/article';
 import { ArticleService } from '../../../core/services/article-service';
 import { firstValueFrom } from 'rxjs';
@@ -13,9 +13,6 @@ export class ArticleCard {
   private readonly articleService = inject(ArticleService);
 
   article = model.required<Article>();
-
-  onSaveChange = output<boolean>();
-  onLinkOpen = output<void>();
 
   hasLastReadAt = computed<boolean>(() => {
     const startOf2000 = new Date('2000-01-01T00:00:00Z');
@@ -56,9 +53,23 @@ export class ArticleCard {
     );
   }
 
-  onLinkClick(): void {
-    this.onLinkOpen.emit();
-    this.fetchLastReadAt();
+  async updateArticleSaved(): Promise<void> {
+    await firstValueFrom(
+      this.articleService.updateArticleSaved(
+        this.article().id,
+        !this.article().save
+      )
+    );
+    this.article.set({ ...this.article(), save: !this.article().save });
+  }
+
+  async onLinkClick(): Promise<void> {
+    await this.markAsRead();
+    await this.fetchLastReadAt();
+  }
+
+  private async markAsRead(): Promise<void> {
+    await firstValueFrom(this.articleService.markAsRead(this.article().id));
   }
 
   private async fetchLastReadAt(): Promise<void> {
