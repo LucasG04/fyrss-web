@@ -37,11 +37,21 @@ export class FeedPage {
           ...feed,
           articles: articles[index],
         }));
+        this.sortFeedsByArticleDates(feedsWithArticles);
+
         this.feeds.set(feedsWithArticles);
       });
   }
 
   goToFeed(feedId: string): void {
     this.router.navigate(['/feed', feedId]);
+  }
+
+  private sortFeedsByArticleDates(feeds: RssFeedWithArticles[]): void {
+    feeds.sort((a, b) => {
+      const aLatest = new Date(a.articles[0]?.publishedAt || 0);
+      const bLatest = new Date(b.articles[0]?.publishedAt || 0);
+      return bLatest.getTime() - aLatest.getTime();
+    });
   }
 }

@@ -6,6 +6,7 @@ import { Article } from '../../../shared/types/article';
 import { RssFeedService } from '../../../core/services/rss-feed-service';
 import { RssFeed } from '../../../shared/types/rss-feed';
 import { ArticleList } from '../../../shared/components/article-list/article-list';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-feed-articles',
@@ -14,6 +15,7 @@ import { ArticleList } from '../../../shared/components/article-list/article-lis
   styleUrl: './feed-articles.css',
 })
 export class FeedArticles {
+  readonly location = inject(Location);
   private readonly route = inject(ActivatedRoute);
   private readonly articleService = inject(ArticleService);
   private readonly rssFeedService = inject(RssFeedService);
