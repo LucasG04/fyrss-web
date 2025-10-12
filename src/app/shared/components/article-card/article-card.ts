@@ -1,5 +1,7 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, inject, model, output } from '@angular/core';
 import { Article } from '../../types/article';
+import { ArticleService } from '../../../core/services/article-service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-article-card',
@@ -8,7 +10,9 @@ import { Article } from '../../types/article';
   styleUrl: './article-card.css',
 })
 export class ArticleCard {
-  article = input.required<Article>();
+  private readonly articleService = inject(ArticleService);
+
+  article = model.required<Article>();
 
   onSaveChange = output<boolean>();
   onLinkOpen = output<void>();
@@ -50,5 +54,22 @@ export class ArticleCard {
         minute: '2-digit',
       })
     );
+  }
+
+  onLinkClick(): void {
+    this.onLinkOpen.emit();
+    this.fetchLastReadAt();
+  }
+
+  private async fetchLastReadAt(): Promise<void> {
+    const updatedArticle = await firstValueFrom(
+      this.articleService.getById(this.article().id)
+    );
+    if (updatedArticle) {
+      this.article.set({
+        ...this.article(),
+        lastReadAt: updatedArticle.lastReadAt,
+      });
+    }
   }
 }

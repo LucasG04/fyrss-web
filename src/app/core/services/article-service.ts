@@ -34,6 +34,10 @@ export class ArticleService {
     );
   }
 
+  getById(articleId: string): Observable<Article> {
+    return this.http.get<Article>(`${this.apiUrl}/articles/${articleId}`);
+  }
+
   markAsRead(articleId: string): Observable<void> {
     return this.http.patch<void>(
       `${this.apiUrl}/articles/${articleId}/read`,
