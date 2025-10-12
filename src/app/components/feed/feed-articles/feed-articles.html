@@ -11,7 +11,12 @@
       </button>
       <h1 class="text-xl font-bold">{{ rssFeed()!.name }}</h1>
     </div>
-    <p class="text-gray-500">{{ rssFeed()!.articleCount }}</p>
+    <span
+      class="border-2 rounded-sm px-1.5 py-0.5 font-mono text-gray-500 font-bold"
+      style="font-size: small"
+    >
+      {{ rssFeed()!.articleCount }}
+    </span>
   </div>
 </div>
 }
