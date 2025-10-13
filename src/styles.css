@@ -3,3 +3,7 @@
 :root {
   --color-primary: #EE4130;
 }
+
+button {
+  @apply cursor-pointer;
+}
