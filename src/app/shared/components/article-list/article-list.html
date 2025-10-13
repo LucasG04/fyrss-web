@@ -13,5 +13,24 @@
     ></i>
     <h3 class="text-lg font-medium text-gray-500 mb-2">No articles found</h3>
   </div>
+  }
+
+  <!-- Loading more indicator -->
+  @if (isLoadingMore()) {
+  <app-loader class="py-4" />
+  }
+
+  <!-- Error message -->
+  @if (!hasError()) {
+  <div class="py-4 flex flex-col items-center gap-2">
+    <p class="text-red-500 mb-2">Failed to load articles</p>
+    <button
+      (click)="loadInitialArticles()"
+      class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors cursor-pointer flex items-center gap-2"
+    >
+      <i class="eva eva-refresh" style="font-size: larger"></i>
+      Retry
+    </button>
+  </div>
   } }
 </div>
