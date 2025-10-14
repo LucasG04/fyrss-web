@@ -1,4 +1,8 @@
 <div class="flex flex-col items-center justify-center gap-4 mx-4">
+  @if (isLoading()) {
+  <app-loader class="py-6" />
+  } @else {
+  <!-- Feed list -->
   @for (feed of feeds(); track feed.id) {
   <div class="max-w-5xl w-full cursor-pointer" (click)="goToFeed(feed.id)">
     <div class="bg-white rounded-lg shadow-md p-3 mx-auto w-full">
@@ -13,5 +17,34 @@
       </div>
     </div>
   </div>
+  } @empty {
+  <div class="py-6 flex flex-col items-center gap-4">
+    <i
+      class="eva eva-radio mx-auto text-gray-400"
+      style="font-size: x-large"
+    ></i>
+    <h3 class="text-lg font-medium text-gray-500">No feeds found</h3>
+    <button
+      (click)="goToRssFeedManagement()"
+      class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+    >
+      <i class="eva eva-plus" style="font-size: larger"></i>
+      Create your first feed
+    </button>
+  </div>
   }
+
+  <!-- Error message -->
+  @if (hasError()) {
+  <div class="py-4 flex flex-col items-center gap-4">
+    <p class="text-red-500">Failed to load feeds</p>
+    <button
+      (click)="loadFeeds()"
+      class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+    >
+      <i class="eva eva-refresh" style="font-size: larger"></i>
+      Retry
+    </button>
+  </div>
+  } }
 </div>

@@ -1,6 +1,6 @@
 <div class="flex flex-col items-center justify-center gap-4 mx-4">
   @if (isLoading()) {
-  <app-loader />
+  <app-loader class="py-6" />
   } @else {
   <!--Article cards -->
   @for (article of articles(); track article.id) {
@@ -21,9 +21,9 @@
   }
 
   <!-- Error message -->
-  @if (!hasError()) {
-  <div class="py-4 flex flex-col items-center gap-2">
-    <p class="text-red-500 mb-2">Failed to load articles</p>
+  @if (hasError()) {
+  <div class="py-4 flex flex-col items-center gap-4">
+    <p class="text-red-500">Failed to load articles</p>
     <button
       (click)="loadInitialArticles()"
       class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
