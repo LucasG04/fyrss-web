@@ -14,7 +14,7 @@
   <!-- Success Message -->
   @if(success()) {
   <div
-    class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6"
+    class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-3 rounded-lg mb-6"
   >
     <div class="flex items-center gap-2">
       <i class="eva eva-checkmark-circle-2" style="font-size: larger"></i>
@@ -26,7 +26,7 @@
   <!-- Error Message -->
   @if (error()) {
   <div
-    class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6"
+    class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-6"
   >
     <div class="flex items-center gap-2">
       <i class="eva eva-close-circle" style="font-size: larger"></i>
@@ -37,8 +37,8 @@
 
   <!-- Create/Edit Form -->
   @if (isCreating() || editingFeed()) {
-  <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-    <h2 class="text-xl font-semibold mb-4">
+  <div class="bg-main rounded-lg shadow-md p-6 mb-6 border border-main">
+    <h2 class="text-xl font-semibold mb-4 text-main">
       {{ editingFeed() ? "Edit RSS Feed" : "Add New RSS Feed" }}
     </h2>
 
@@ -50,10 +50,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <!-- Name Field -->
         <div>
-          <label
-            for="name"
-            class="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label for="name" class="block text-sm font-medium text-main mb-1">
             Feed Name *
           </label>
           <input
@@ -61,7 +58,7 @@
             id="name"
             formControlName="name"
             placeholder="example.com"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent form-input"
+            class="w-full px-3 py-2 bg-main border border-main text-main rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent form-input"
             [class.error-border]="getFieldError('name')"
           />
           @if (getFieldError('name')) {
@@ -73,7 +70,7 @@
 
         <!-- URL Field -->
         <div>
-          <label for="url" class="block text-sm font-medium text-gray-700 mb-1">
+          <label for="url" class="block text-sm font-medium text-main mb-1">
             Feed URL *
           </label>
           <input
@@ -81,7 +78,7 @@
             id="url"
             formControlName="url"
             placeholder="https://example.com/feed.xml"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent form-input"
+            class="w-full px-3 py-2 bg-main border border-main text-main rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent form-input"
             [class.error-border]="getFieldError('url')"
           />
           @if (getFieldError('url')) {
@@ -154,20 +151,20 @@
   <div class="space-y-4">
     @for (feed of feeds(); track feed.id) {
     <div
-      class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200 feed-card"
+      class="bg-main rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200 feed-card border border-main"
     >
       <div class="flex justify-between items-start">
         <div class="flex-1">
-          <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          <h3 class="text-lg font-semibold text-main mb-2">
             {{ feed.name }}
           </h3>
-          <p class="text-gray-600 text-sm break-all url-text">{{ feed.url }}</p>
+          <p class="text-soft text-sm break-all url-text">{{ feed.url }}</p>
         </div>
 
         <div class="flex gap-2 ml-4">
           <button
             (click)="startEditing(feed)"
-            class="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 flex items-center justify-center"
+            class="p-2 text-soft hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors duration-200 flex items-center justify-center"
             title="Edit feed"
           >
             <i class="eva eva-edit-2-outline" style="font-size: larger"></i>
@@ -175,7 +172,7 @@
 
           <button
             (click)="confirmDelete(feed.id)"
-            class="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200 flex items-center justify-center"
+            class="p-2 text-soft hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200 flex items-center justify-center"
             title="Delete feed"
           >
             <i class="eva eva-trash-2-outline" style="font-size: larger"></i>

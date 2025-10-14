@@ -1,10 +1,10 @@
-<div class="bg-white rounded-lg shadow-md p-6 mx-auto w-full">
+<div class="bg-main rounded-lg shadow-md p-6 mx-auto w-full border border-main">
   <div class="flex justify-between items-center gap-4">
-    <h2 class="text-xl font-bold" [class.text-gray-500]="hasLastReadAt()">
+    <h2 class="text-xl font-bold text-main" [class.text-soft]="hasLastReadAt()">
       {{ article().title }}
     </h2>
     <button
-      class="ml-4 bg-gray-100 hover:bg-gray-200 transition-colors rounded-full p-2 flex items-center justify-center"
+      class="ml-4 bg-card hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors rounded-full p-2 flex items-center justify-center"
       title="Save"
       (click)="updateArticleSaved()"
     >
@@ -14,23 +14,23 @@
         [class.eva-bookmark]="article().save"
         [class.eva-bookmark-outline]="!article().save"
         [class.text-amber-300]="article().save"
-        [class.text-gray-600]="!article().save"
+        [class.text-soft]="!article().save"
       ></i>
     </button>
   </div>
-  <p class="text-gray-700 mb-2 line-clamp-5">{{ article().description }}</p>
+  <p class="text-soft mb-2 line-clamp-5">{{ article().description }}</p>
   <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
     <div class="flex items-center gap-2">
-      <i class="eva eva-link-2"></i>
+      <i class="eva eva-link-2 text-soft"></i>
       <a
-        class="text-sm text-blue-600 hover:underline block"
+        class="text-sm text-blue-600 dark:text-blue-400 hover:underline block"
         href="{{ article().sourceUrl }}"
         target="_blank"
         (click)="onLinkClick()"
         >{{ sourceUrlShort() }}</a
       >
     </div>
-    <div class="text-sm text-gray-500">
+    <div class="text-sm text-soft">
       {{ getDateFromUtc(article().publishedAt) }}
     </div>
   </div>

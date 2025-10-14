@@ -7,7 +7,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
   </head>
-  <body class="bg-gray-50">
+  <body class="bg-card">
     <app-root></app-root>
   </body>
+  <script>
+    /* Tiny, idempotent theme preflight: */
+    (() => {
+      try {
+        const key = "app:theme-mode";
+        const stored = localStorage.getItem(key);
+        const mode =
+          stored === "light" || stored === "dark" || stored === "system"
+            ? stored
+            : "system";
+        const prefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const dark = mode === "dark" || (mode === "system" && prefersDark);
+        if (dark) document.documentElement.classList.add("dark");
+      } catch {
+        /* If storage is blocked, fall back to OS */
+        try {
+          const prefersDark =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+          if (prefersDark) document.documentElement.classList.add("dark");
+        } catch {}
+      }
+    })();
+  </script>
 </html>

@@ -8,12 +8,12 @@
     <div class="flex items-center gap-2">
       <button
         (click)="location.back()"
-        class="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200 flex items-center justify-center"
+        class="p-2 text-slate-600 dark:text-slate-300 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200 flex items-center justify-center"
         title="Edit feed"
       >
         <i class="eva eva-chevron-left-outline" style="font-size: larger"></i>
       </button>
-      <h1 class="text-xl font-bold">{{ rssFeed()!.name }}</h1>
+      <h1 class="text-main text-xl font-bold">{{ rssFeed()!.name }}</h1>
     </div>
     <span
       class="border-2 rounded-sm px-1.5 py-0.5 font-mono text-gray-500 font-bold"
@@ -27,7 +27,7 @@
 } @else {
 <div class="flex flex-col items-center justify-center h-full text-center px-4">
   <i class="eva eva-alert-triangle-outline" style="font-size: 4rem"></i>
-  <h2 class="text-2xl font-bold mt-4">Feed not found</h2>
+  <h2 class="text-main text-2xl font-bold mt-4">Feed not found</h2>
   <p class="text-gray-600 mt-2">
     The feed you are looking for does not exist or has been removed.
   </p>

@@ -5,25 +5,29 @@
   <!-- Feed list -->
   @for (feed of feeds(); track feed.id) {
   <div class="max-w-5xl w-full cursor-pointer" (click)="goToFeed(feed.id)">
-    <div class="bg-white rounded-lg shadow-md p-3 mx-auto w-full">
+    <div
+      class="bg-main rounded-lg shadow-md p-3 mx-auto w-full border border-main"
+    >
       <div class="flex justify-between items-center mb-2">
-        <h1 class="text-lg font-bold">{{ feed.name }}</h1>
-        <i class="eva eva-chevron-right-outline" style="font-size: x-large"></i>
+        <h1 class="text-lg font-bold text-main">{{ feed.name }}</h1>
+        <i
+          class="eva eva-chevron-right-outline text-soft"
+          style="font-size: x-large"
+        ></i>
       </div>
-      <div class="bg-gray-100 rounded-md w-full p-3 flex flex-col gap-1.5">
+      <div class="bg-card rounded-md w-full p-3 flex flex-col gap-1.5">
         @for (article of feed.articles; track article.id) {
-        <p class="font-mono text-xs truncate w-full">{{ article.title }}</p>
+        <p class="font-mono text-xs truncate w-full text-soft">
+          {{ article.title }}
+        </p>
         }
       </div>
     </div>
   </div>
   } @empty {
   <div class="py-6 flex flex-col items-center gap-4">
-    <i
-      class="eva eva-radio mx-auto text-gray-400"
-      style="font-size: x-large"
-    ></i>
-    <h3 class="text-lg font-medium text-gray-500">No feeds found</h3>
+    <i class="eva eva-radio mx-auto text-soft" style="font-size: x-large"></i>
+    <h3 class="text-lg font-medium text-soft">No feeds found</h3>
     <button
       (click)="goToRssFeedManagement()"
       class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
