@@ -1,11 +1,12 @@
 import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ConfigService } from './core/services/config-service';
+import { ThemeToggle } from './shared/components/theme-toggle/theme-toggle';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, ThemeToggle],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

@@ -16,7 +16,7 @@ export class ThemeService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
 
-  // Media query for OS-level dark scheme
+  /** Media query for OS-level dark scheme */
   private readonly mql: MediaQueryList | null =
     this.isBrowser && 'matchMedia' in window
       ? window.matchMedia('(prefers-color-scheme: dark)')
@@ -55,19 +55,17 @@ export class ThemeService {
     // Persist only the selected mode
     effect(() => {
       if (!this.isBrowser) return;
-      const m = this.mode();
       try {
-        localStorage.setItem(STORAGE_KEY, m);
-      } catch {
+        localStorage.setItem(STORAGE_KEY, this.mode());
+      } catch (e) {
         /* ignore storage errors */
+        console.error('Failed to store theme mode', e);
       }
     });
   }
 
   setMode(mode: ThemeMode): void {
-    if (mode === 'system' || mode === 'light' || mode === 'dark') {
-      this.mode.set(mode);
-    }
+    this.mode.set(mode);
   }
 
   private readStoredMode(): ThemeMode {
