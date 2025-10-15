@@ -30,11 +30,7 @@ export class ArticleCard {
     }
 
     const host = url.hostname.replace('www.', '');
-    const path =
-      url.pathname.length > 30
-        ? `${url.pathname.slice(0, 27)}...`
-        : url.pathname;
-    return `${host}${path}`;
+    return `${host}${url.pathname}`;
   });
 
   getDateFromUtc(dateString: string): string {

@@ -6,16 +6,18 @@
   @for (feed of feeds(); track feed.id) {
   <div class="max-w-5xl w-full cursor-pointer" (click)="goToFeed(feed.id)">
     <div
-      class="bg-main rounded-lg shadow-md p-3 mx-auto w-full border border-main"
+      class="bg-main rounded-xl shadow-sm dark:shadow-none p-4 mx-auto w-full border border-main"
     >
-      <div class="flex justify-between items-center mb-2">
-        <h1 class="text-lg font-bold text-main">{{ feed.name }}</h1>
+      <div class="flex justify-between items-center mb-3">
+        <h1 class="text-lg font-bold text-main">
+          {{ feed.name }}
+        </h1>
         <i
           class="eva eva-chevron-right-outline text-soft"
           style="font-size: x-large"
         ></i>
       </div>
-      <div class="bg-card rounded-md w-full p-3 flex flex-col gap-1.5">
+      <div class="bg-card rounded-lg w-full p-3 flex flex-col gap-2 shadow-sm">
         @for (article of feed.articles; track article.id) {
         <p class="font-mono text-xs truncate w-full text-soft">
           {{ article.title }}
