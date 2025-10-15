@@ -14,7 +14,7 @@ import { ThemeService } from '../../../core/services/theme-service';
   template: `
     <button
       (click)="toggleTheme()"
-      class="relative p-2 rounded-lg bg-card bg-card-hover text-soft hover:text-main transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+      class="relative p-2 rounded-lg bg-card bg-card-hover text-soft text-main-hover transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
       [attr.aria-label]="ariaLabel()"
       title="Toggle theme"
     >

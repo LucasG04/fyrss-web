@@ -1,11 +1,19 @@
-<nav class="border-b border-main bg-main/90 shadow-sm">
+<nav class="border-b border-main bg-main/95 shadow-sm sticky">
   <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
     <!-- Row: brand + desktop links + mobile toggle -->
     <div class="flex h-14 items-center justify-between">
       <!-- Brand -->
-      <a routerLink="/" class="flex items-center gap-2">
-        <img src="/fyrss-icon-512.png" class="h-8 w-8" alt="FY RSS Logo" />
-        <span class="text-xl font-semibold tracking-tight text-main"
+      <a
+        routerLink="/"
+        class="flex items-center gap-2 group transition-all duration-200 hover:scale-105"
+      >
+        <img
+          src="/fyrss-icon-512.png"
+          class="h-8 w-8 transition-transform duration-200 group-hover:rotate-3"
+          alt="FY RSS Logo"
+        />
+        <span
+          class="text-xl font-semibold tracking-tight text-main transition-colors duration-200 group-hover:text-slate-700 dark:group-hover:text-slate-300"
           >ForYou RSS</span
         >
       </a>
@@ -15,36 +23,40 @@
         <ul class="flex items-center gap-1">
           <li>
             <a
-              class="inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-soft hover:text-main hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 transition-colors"
+              class="relative inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-soft transition-all duration-200 text-main-hover bg-card-hover"
               routerLink="/feed"
-              routerLinkActive="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
+              routerLinkActive="text-slate-900 dark:text-slate-50 bg-gray-200 dark:bg-slate-700"
               aria-current="page"
-              >Feed</a
             >
+              Feed
+            </a>
           </li>
           <li>
             <a
-              class="inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-soft hover:text-main hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 transition-colors"
+              class="relative inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-soft transition-all duration-200 text-main-hover bg-card-hover"
               routerLink="/saved"
-              routerLinkActive="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-              >Saved</a
+              routerLinkActive="text-slate-900 dark:text-slate-50 bg-gray-200 dark:bg-slate-700"
             >
+              Saved
+            </a>
           </li>
           <li>
             <a
-              class="inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-soft hover:text-main hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 transition-colors"
+              class="relative inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-soft transition-all duration-200 text-main-hover bg-card-hover"
               routerLink="/history"
-              routerLinkActive="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-              >History</a
+              routerLinkActive="text-slate-900 dark:text-slate-50 bg-gray-200 dark:bg-slate-700"
             >
+              History
+            </a>
           </li>
           <li>
             <a
-              class="inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-soft hover:text-main hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 transition-colors"
+              class="relative inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-soft transition-all duration-200 text-main-hover bg-card-hover"
               routerLink="/rss-feeds"
-              routerLinkActive="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-              >RSS Feeds</a
+              routerLinkActive="text-slate-900 dark:text-slate-50 bg-gray-200 dark:bg-slate-700"
             >
+              RSS Feeds
+            </a>
           </li>
         </ul>
 
@@ -63,24 +75,27 @@
           (click)="toggleMenu()"
           [attr.aria-expanded]="isMenuOpen()"
           aria-controls="main-menu"
-          class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-soft hover:text-main hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 transition-colors"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-soft text-main-hover bg-card-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/60 transition-all duration-200 hover:scale-105"
         >
-          <span class="sr-only">Open main menu</span>
-          <svg
-            class="h-5 w-5"
-            aria-hidden="true"
-            viewBox="0 0 17 14"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1 1h15M1 7h15M1 13h15"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+          <span class="sr-only">Toggle main menu</span>
+          <div class="relative w-6 h-6">
+            <i
+              class="eva eva-menu absolute inset-0 transition-all duration-300 ease-in-out"
+              [class.opacity-100]="!isMenuOpen()"
+              [class.opacity-0]="isMenuOpen()"
+              [class.rotate-90]="isMenuOpen()"
+              [class.scale-75]="isMenuOpen()"
+              style="font-size: 24px"
+            ></i>
+            <i
+              class="eva eva-close absolute inset-0 transition-all duration-300 ease-in-out"
+              [class.opacity-0]="!isMenuOpen()"
+              [class.opacity-100]="isMenuOpen()"
+              [class.-rotate-90]="!isMenuOpen()"
+              [class.scale-75]="!isMenuOpen()"
+              style="font-size: 24px"
+            ></i>
+          </div>
         </button>
       </div>
     </div>
@@ -88,41 +103,49 @@
     <!-- Mobile panel -->
     <div
       id="main-menu"
-      [class]="isMenuOpen() ? 'md:hidden' : 'hidden md:hidden'"
+      [class]="
+        isMenuOpen()
+          ? 'md:hidden transition-all duration-200 ease-out transform mobile-menu-enter'
+          : 'hidden md:hidden'
+      "
       class="pt-2 pb-4"
     >
-      <ul class="space-y-1 rounded-lg border border-main bg-card p-2">
+      <ul class="space-y-1 rounded-lg border border-main bg-card p-2 shadow-lg">
         <li>
           <a
-            class="block rounded-lg px-3 py-2 text-sm font-medium text-soft hover:text-main hover:bg-main/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 transition-colors"
+            class="relative block rounded-lg px-3 py-2 text-sm font-medium text-soft transition-all duration-200 text-main-hover bg-card-hover"
             routerLink="/feed"
-            routerLinkActive="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-            >Feed</a
+            routerLinkActive="text-slate-900 dark:text-slate-50 bg-gray-200 dark:bg-slate-700"
           >
+            Feed
+          </a>
         </li>
         <li>
           <a
-            class="block rounded-lg px-3 py-2 text-sm font-medium text-soft hover:text-main hover:bg-main/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 transition-colors"
+            class="relative block rounded-lg px-3 py-2 text-sm font-medium text-soft transition-all duration-200 text-main-hover bg-card-hover"
             routerLink="/saved"
-            routerLinkActive="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-            >Saved</a
+            routerLinkActive="text-slate-900 dark:text-slate-50 bg-gray-200 dark:bg-slate-700"
           >
+            Saved
+          </a>
         </li>
         <li>
           <a
-            class="block rounded-lg px-3 py-2 text-sm font-medium text-soft hover:text-main hover:bg-main/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 transition-colors"
+            class="relative block rounded-lg px-3 py-2 text-sm font-medium text-soft transition-all duration-200 text-main-hover bg-card-hover"
             routerLink="/history"
-            routerLinkActive="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-            >History</a
+            routerLinkActive="text-slate-900 dark:text-slate-50 bg-gray-200 dark:bg-slate-700"
           >
+            History
+          </a>
         </li>
         <li>
           <a
-            class="block rounded-lg px-3 py-2 text-sm font-medium text-soft hover:text-main hover:bg-main/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 transition-colors"
+            class="relative block rounded-lg px-3 py-2 text-sm font-medium text-soft transition-all duration-200 text-main-hover bg-card-hover"
             routerLink="/rss-feeds"
-            routerLinkActive="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-            >RSS Feeds</a
+            routerLinkActive="text-slate-900 dark:text-slate-50 bg-gray-200 dark:bg-slate-700"
           >
+            RSS Feeds
+          </a>
         </li>
       </ul>
     </div>

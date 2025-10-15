@@ -2,7 +2,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --color-primary: #EE4130;
+  --color-primary: #ee4130;
 }
 
 button {
@@ -16,14 +16,18 @@ button {
 
 .bg-card {
   @apply bg-gray-50 dark:bg-slate-800;
+}
 
-  &.bg-card-hover {
-    @apply hover:bg-gray-200 dark:hover:bg-slate-700;
-  }
+.bg-card-hover {
+  @apply hover:bg-gray-200 dark:hover:bg-slate-700;
 }
 
 .text-main {
   @apply text-slate-900 dark:text-slate-50;
+}
+
+.text-main-hover {
+  @apply hover:text-slate-900 dark:hover:text-slate-50;
 }
 
 .text-soft {
