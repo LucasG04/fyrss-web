@@ -19,12 +19,14 @@
     </button>
   </div>
   <p class="text-soft mb-2 line-clamp-5">{{ article().description }}</p>
-  <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
-    <div class="flex items-center gap-2">
-      <i class="eva eva-link-2 text-soft"></i>
+  <div
+    class="flex flex-col sm:flex-row sm:flex-wrap sm:justify-between sm:items-center gap-2 mb-2"
+  >
+    <div class="flex items-center gap-2 min-w-0 flex-1">
+      <i class="eva eva-link-2 text-soft shrink-0"></i>
       <a
-        class="text-sm text-blue-600 dark:text-blue-400 hover:underline block"
-        href="{{ article().sourceUrl }}"
+        class="text-sm text-blue-600 dark:text-blue-400 hover:underline block flex-1 min-w-0 truncate"
+        [href]="article().sourceUrl"
         target="_blank"
         (click)="onLinkClick()"
         >{{ sourceUrlShort() }}</a
