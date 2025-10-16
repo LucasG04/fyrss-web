@@ -11,6 +11,11 @@ interface RssFeedWithArticles extends RssFeed {
   articles: Article[];
 }
 
+interface ScoredFeed {
+  feed: RssFeedWithArticles;
+  score: number;
+}
+
 @Component({
   selector: 'app-feed-page',
   imports: [Loader],
@@ -26,13 +31,11 @@ export class FeedPage {
   isLoading = signal(true);
   hasError = signal(false);
 
-  /** After 7 days, the recency score halves */
-  private static readonly RECENCY_HALF_LIFE_DAYS = 7;
-  /** Strength of the "rarely publishing" boost */
-  private static readonly RARITY_ALPHA = 0.3;
-  /** Used when there is too little data */
-  private static readonly DEFAULT_INTERVAL_DAYS = 14;
-  private static readonly MIN_ARTICLES_FOR_INTERVAL = 2;
+  // Frequency-adjusted recency scoring parameters
+  private static readonly FAST_FEED_HALF_LIFE_DAYS = 2; // for daily news feeds
+  private static readonly SLOW_FEED_HALF_LIFE_DAYS = 14; // for weekly newsletters
+  private static readonly FREQUENCY_THRESHOLD_DAYS = 3; // feeds posting more often than this are "fast"
+  private static readonly MIN_ARTICLES_FOR_FREQUENCY = 3; // minimum articles needed to calculate frequency
 
   constructor() {
     this.loadFeeds();
@@ -54,7 +57,7 @@ export class FeedPage {
       .then(async (feeds) => {
         const articlesPerFeed = await Promise.all(
           feeds.map((feed) =>
-            firstValueFrom(this.articleService.getPaginatedFeed(feed.id, 0, 4))
+            firstValueFrom(this.articleService.getPaginatedFeed(feed.id, 0, 5))
           )
         );
 
@@ -73,131 +76,146 @@ export class FeedPage {
   }
 
   /**
-   * Sort feeds by a combined score: score = recency * (1 + alpha * rarity)
-   * Higher score first.
+   * Sort feeds by frequency-adjusted recency score.
+   * Higher score first; ties by latest article date, then by name.
+   * Uses different decay rates for fast vs slow feeds to prevent
+   * high-frequency news feeds from overwhelming newsletters.
    */
   private sortFeedsByRecencyAndRarity(
     feeds: RssFeedWithArticles[]
   ): RssFeedWithArticles[] {
     return feeds
-      .map((f) => ({ feed: f, score: this.scoreFeed(f) }))
-      .toSorted((a, b) => {
-        // primary: score desc
-        if (b.score !== a.score) {
-          return b.score - a.score;
-        }
-
-        // tie-breaker 1: latest article date desc
-        const aLatest = this.getLatestDate(a.feed.articles);
-        const bLatest = this.getLatestDate(b.feed.articles);
-        if (bLatest.getTime() !== aLatest.getTime())
-          return bLatest.getTime() - aLatest.getTime();
-
-        // tie-breaker 2: by feed name
-        return (a.feed.name ?? '').localeCompare(b.feed.name ?? '');
-      })
+      .map((f) => ({
+        feed: f,
+        score: this.scoreFeed(f),
+      }))
+      .toSorted((a, b) => this.compareScored(a, b))
       .map((x) => x.feed);
   }
 
+  private compareScored(a: ScoredFeed, b: ScoredFeed): number {
+    if (b.score !== a.score) return b.score - a.score;
+
+    // tie-breaker 1: latest article date desc
+    const aLatest = this.getLatestOrNow(a.feed.articles);
+    const bLatest = this.getLatestOrNow(b.feed.articles);
+    if (bLatest.getTime() !== aLatest.getTime()) {
+      return bLatest.getTime() - aLatest.getTime();
+    }
+
+    // tie-breaker 2: by feed name asc (null-safe)
+    return (a.feed.name ?? '').localeCompare(b.feed.name ?? '');
+  }
+
+  /**
+   * Calculates a frequency-adjusted recency score for the feed.
+   * Fast feeds decay quickly, slow feeds decay slowly.
+   */
   private scoreFeed(feed: RssFeedWithArticles): number {
-    const latest = this.getLatestDate(feed.articles);
+    const latest = this.getLatestOrNow(feed.articles);
     const ageDays = this.daysBetween(latest, new Date());
 
-    const recency = this.recencyScore(ageDays, FeedPage.RECENCY_HALF_LIFE_DAYS);
-    const rarity = this.rarityScore(feed.articles);
+    // Calculate appropriate half-life based on feed frequency
+    const halfLife = this.getFrequencyAdjustedHalfLife(feed.articles);
+    const recency = this.recencyScore(ageDays, halfLife);
 
-    return recency * (1 + FeedPage.RARITY_ALPHA * rarity);
-  }
-
-  /** Exponential decay by age in days, half-life parameterized. Range (0,1]. */
-  private recencyScore(ageDays: number, halfLifeDays: number): number {
-    if (!isFinite(ageDays) || ageDays < 0) {
-      return 1;
-    }
-    const lambda = Math.log(2) / Math.max(halfLifeDays, 1e-3);
-    return Math.exp(-lambda * ageDays);
+    return recency;
   }
 
   /**
-   * Rarity: log2(1 + median interval days).
-   * Larger intervals (rarere publishing) yield higher values.
+   * Determines the half-life for recency scoring based on feed frequency.
+   * Fast feeds (daily news) get shorter half-life, slow feeds (newsletters) get longer half-life.
    */
-  private rarityScore(articles: Article[]): number {
-    const medianInterval = this.medianIntervalDays(articles);
-    // log2 keeps growth moderate and robust against outliers
-    return Math.log2(1 + Math.max(0, medianInterval));
+  private getFrequencyAdjustedHalfLife(articles: Article[]): number {
+    const averageInterval = this.getAveragePublishingInterval(articles);
+
+    // If we can't determine frequency or it's very fast, use fast feed settings
+    if (
+      averageInterval <= 0 ||
+      averageInterval <= FeedPage.FREQUENCY_THRESHOLD_DAYS
+    ) {
+      return FeedPage.FAST_FEED_HALF_LIFE_DAYS;
+    }
+
+    // For slower feeds, use longer half-life
+    return FeedPage.SLOW_FEED_HALF_LIFE_DAYS;
   }
 
   /**
-   * Latest publishedAt, but no date in the future.
-   * If all articles are in the future, take the earliest of them.
+   * Calculate average days between articles to determine publishing frequency.
+   * Returns 0 if insufficient data.
    */
-  private getLatestDate(articles: Article[]): Date {
-    if (!articles?.length) {
-      return new Date(0);
+  private getAveragePublishingInterval(articles: Article[]): number {
+    if (!articles || articles.length < FeedPage.MIN_ARTICLES_FOR_FREQUENCY) {
+      return 0;
     }
 
-    const now = Date.now();
-    const validDates = articles
-      .map((a) => new Date(a?.publishedAt ?? 0))
-      .filter((d) => Number.isFinite(d.getTime()));
+    const intervals = this.intervalDays(articles);
+    if (intervals.length === 0) return 0;
 
-    if (!validDates.length) {
-      return new Date(0);
-    }
-
-    const pastOrPresent = validDates.filter((d) => d.getTime() <= now);
-
-    if (pastOrPresent.length > 0) {
-      const latestPast = pastOrPresent.reduce(
-        (latest, d) => (d.getTime() > latest.getTime() ? d : latest),
-        new Date(0)
-      );
-      return latestPast;
-    }
-
-    const earliestFuture = validDates.reduce(
-      (earliest, d) => (d.getTime() < earliest.getTime() ? d : earliest),
-      validDates[0]
+    return (
+      intervals.reduce((sum, interval) => sum + interval, 0) / intervals.length
     );
-
-    return earliestFuture;
   }
 
   /**
-   * Median of consecutive publishedAt intervals (in days).
-   * Requires at least 2 articles; otherwise returns DEFAULT_INTERVAL_DAYS.
+   * Exponential decay by age in days, half-life parameterized. Range (0,1].
+   * Invalid ages are treated conservatively (small value, not 1).
    */
-  private medianIntervalDays(articles: Article[]): number {
+  private recencyScore(ageDays: number, halfLifeDays: number): number {
+    if (!isFinite(ageDays)) {
+      return Math.exp(-Math.log(2) * 2);
+    }
+    const safeAge = Math.max(0, ageDays);
+    const lambda = Math.log(2) / Math.max(halfLifeDays, 1e-3);
+    return Math.exp(-lambda * safeAge);
+  }
+
+  private intervalDays(articles: Article[]): number[] {
     const items = (articles ?? [])
       .map((a) => new Date(a?.publishedAt ?? 0))
       .filter((d) => Number.isFinite(d.getTime()))
-      .toSorted((a, b) => b.getTime() - a.getTime()); // newest to oldest
-
-    if (items.length < FeedPage.MIN_ARTICLES_FOR_INTERVAL) {
-      return FeedPage.DEFAULT_INTERVAL_DAYS;
-    }
+      // newest to oldest
+      .sort((a, b) => b.getTime() - a.getTime());
 
     const intervals: number[] = [];
     for (let i = 0; i < items.length - 1; i++) {
-      const days = this.daysBetween(items[i + 1], items[i]); // older to newer
+      // gap between older and newer
+      const days = this.daysBetween(items[i + 1], items[i]);
       if (Number.isFinite(days) && days >= 0) intervals.push(days);
     }
-
-    if (!intervals.length) {
-      return FeedPage.DEFAULT_INTERVAL_DAYS;
-    }
-
-    intervals.sort((a, b) => a - b);
-    const mid = Math.floor(intervals.length - 1 / 2);
-    return intervals.length % 2 === 0
-      ? (intervals[mid] + intervals[mid - 1]) / 2
-      : intervals[mid];
+    return intervals;
   }
 
-  /** Difference in days between two dates (absolute). */
+  /**
+   * Latest publishedAt not in the future; if all are future, clamp to now.
+   * If no valid dates, return epoch (very old).
+   */
+  private getLatestOrNow(articles: Article[]): Date {
+    if (!articles?.length) return new Date(0);
+
+    const now = Date.now();
+    const valid = articles
+      .map((a) => new Date(a?.publishedAt ?? 0))
+      .filter((d) => Number.isFinite(d.getTime()));
+
+    if (!valid.length) return new Date(0);
+
+    const pastOrPresent = valid.filter((d) => d.getTime() <= now);
+    if (pastOrPresent.length > 0) {
+      return pastOrPresent.reduce(
+        (latest, d) => (d.getTime() > latest.getTime() ? d : latest),
+        new Date(0)
+      );
+    }
+
+    // all in the future, treat as "now" (no penalty)
+    return new Date(now);
+  }
+
+  /** Non-negative difference in days between two dates. */
   private daysBetween(a: Date, b: Date): number {
-    const ms = Math.abs(b.getTime() - a.getTime());
-    return ms / (1000 * 60 * 60 * 24);
+    const ms = b.getTime() - a.getTime();
+    return Math.max(0, ms) / (1000 * 60 * 60 * 24);
   }
 }
