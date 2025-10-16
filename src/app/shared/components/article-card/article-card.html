@@ -1,7 +1,7 @@
 <div
   class="bg-main rounded-xl shadow-sm dark:shadow-none p-6 mx-auto w-full border border-main"
 >
-  <div class="flex justify-between items-center gap-4">
+  <div class="flex justify-between items-center gap-2">
     <h2
       class="text-xl font-bold"
       [class.text-main]="!hasLastReadAt()"
@@ -10,7 +10,7 @@
       {{ article().title }}
     </h2>
     <button
-      class="ml-4 bg-card bg-card-hover transition-colors rounded-full p-2 flex items-center justify-center"
+      class="bg-card bg-card-hover transition-colors rounded-full p-2 flex items-center justify-center"
       title="Save"
       (click)="updateArticleSaved()"
     >
