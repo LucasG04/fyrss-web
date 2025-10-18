@@ -12,10 +12,16 @@
         <h1 class="text-lg font-bold text-main">
           {{ feed.name }}
         </h1>
-        <i
-          class="eva eva-chevron-right-outline text-soft"
-          style="font-size: x-large"
-        ></i>
+        <div class="flex items-center gap-2">
+          <app-pulse-indicator
+            [isActive]="hasNewArticles(feed)"
+            ariaLabel="New articles available"
+          />
+          <i
+            class="eva eva-chevron-right-outline text-soft"
+            style="font-size: x-large"
+          ></i>
+        </div>
       </div>
       <div class="bg-card rounded-lg w-full p-3 flex flex-col gap-2 shadow-sm">
         @for (article of feed.articles; track article.id) {

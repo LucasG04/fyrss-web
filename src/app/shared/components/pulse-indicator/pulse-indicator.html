@@ -1,0 +1,8 @@
+@if (isActive()) {
+<span
+  class="status-dot"
+  [attr.aria-live]="'polite'"
+  [attr.role]="'status'"
+  [attr.aria-label]="isActive() ? ariaLabel() : undefined"
+></span>
+}

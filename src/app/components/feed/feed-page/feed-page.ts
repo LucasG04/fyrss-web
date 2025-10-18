@@ -6,6 +6,8 @@ import { RssFeedService } from '../../../core/services/rss-feed-service';
 import { RssFeed } from '../../../shared/types/rss-feed';
 import { Router } from '@angular/router';
 import { Loader } from '../../../shared/components/loader/loader';
+import { PulseIndicator } from '../../../shared/components/pulse-indicator/pulse-indicator';
+import { FeedLastReadService } from '../../../core/services/feed-last-read-service';
 
 interface RssFeedWithArticles extends RssFeed {
   articles: Article[];
@@ -18,7 +20,7 @@ interface ScoredFeed {
 
 @Component({
   selector: 'app-feed-page',
-  imports: [Loader],
+  imports: [Loader, PulseIndicator],
   templateUrl: './feed-page.html',
   styleUrl: './feed-page.css',
 })
@@ -26,6 +28,7 @@ export class FeedPage {
   private readonly articleService = inject(ArticleService);
   private readonly feedService = inject(RssFeedService);
   private readonly router = inject(Router);
+  private readonly feedLastReadService = inject(FeedLastReadService);
 
   feeds = signal<RssFeedWithArticles[]>([]);
   isLoading = signal(true);
@@ -43,6 +46,17 @@ export class FeedPage {
 
   goToFeed(feedId: string): void {
     this.router.navigate(['/feed', feedId]);
+    this.feedLastReadService.setLastRead(feedId, Date.now());
+  }
+
+  hasNewArticles(feed: RssFeedWithArticles): boolean {
+    const lastRead = this.feedLastReadService.getLastRead(feed.id);
+    if (lastRead === null) {
+      return false;
+    }
+    return feed.articles.some(
+      (article) => new Date(article.publishedAt).getTime() > lastRead
+    );
   }
 
   goToRssFeedManagement(): void {
