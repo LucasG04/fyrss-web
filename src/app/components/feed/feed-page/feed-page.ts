@@ -46,16 +46,16 @@ export class FeedPage {
 
   goToFeed(feedId: string): void {
     this.router.navigate(['/feed', feedId]);
-    this.feedLastReadService.setLastRead(feedId, Date.now());
+    this.feedLastReadService.setLastRead(feedId, new Date());
   }
 
   hasNewArticles(feed: RssFeedWithArticles): boolean {
     const lastRead = this.feedLastReadService.getLastRead(feed.id);
-    if (lastRead === null) {
+    if (!lastRead) {
       return false;
     }
     return feed.articles.some(
-      (article) => new Date(article.publishedAt).getTime() > lastRead
+      (article) => new Date(article.publishedAt).getTime() > lastRead.getTime()
     );
   }
 
