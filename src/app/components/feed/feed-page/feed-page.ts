@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { Loader } from '../../../shared/components/loader/loader';
 import { PulseIndicator } from '../../../shared/components/pulse-indicator/pulse-indicator';
 import { FeedLastReadService } from '../../../core/services/feed-last-read-service';
+import { ScrollPositionService } from '../../../core/services/scroll-position-service';
 
 interface RssFeedWithArticles extends RssFeed {
   articles: Article[];
@@ -29,22 +30,25 @@ export class FeedPage {
   private readonly feedService = inject(RssFeedService);
   private readonly router = inject(Router);
   private readonly feedLastReadService = inject(FeedLastReadService);
+  private readonly scrollPositionService = inject(ScrollPositionService);
 
   feeds = signal<RssFeedWithArticles[]>([]);
   isLoading = signal(true);
   hasError = signal(false);
 
+  private readonly SCROLL_POSITION_KEY = 'feed-page';
   // Frequency-adjusted recency scoring parameters
-  private static readonly FAST_FEED_HALF_LIFE_DAYS = 2; // for daily news feeds
-  private static readonly SLOW_FEED_HALF_LIFE_DAYS = 14; // for weekly newsletters
-  private static readonly FREQUENCY_THRESHOLD_DAYS = 3; // feeds posting more often than this are "fast"
-  private static readonly MIN_ARTICLES_FOR_FREQUENCY = 3; // minimum articles needed to calculate frequency
+  private readonly FAST_FEED_HALF_LIFE_DAYS = 2; // for daily news feeds
+  private readonly SLOW_FEED_HALF_LIFE_DAYS = 14; // for weekly newsletters
+  private readonly FREQUENCY_THRESHOLD_DAYS = 3; // feeds posting more often than this are "fast"
+  private readonly MIN_ARTICLES_FOR_FREQUENCY = 3; // minimum articles needed to calculate frequency
 
   constructor() {
     this.loadFeeds();
   }
 
   goToFeed(feedId: string): void {
+    this.scrollPositionService.saveScrollPosition(this.SCROLL_POSITION_KEY);
     this.router.navigate(['/feed', feedId]);
     this.feedLastReadService.setLastRead(feedId, new Date());
   }
@@ -86,7 +90,14 @@ export class FeedPage {
         this.feeds.set(sorted);
       })
       .catch(() => this.hasError.set(true))
-      .finally(() => this.isLoading.set(false));
+      .finally(() => {
+        this.isLoading.set(false);
+        if (!this.hasError()) {
+          this.scrollPositionService.restoreScrollPosition(
+            this.SCROLL_POSITION_KEY
+          );
+        }
+      });
   }
 
   /**
@@ -146,13 +157,13 @@ export class FeedPage {
     // If we can't determine frequency or it's very fast, use fast feed settings
     if (
       averageInterval <= 0 ||
-      averageInterval <= FeedPage.FREQUENCY_THRESHOLD_DAYS
+      averageInterval <= this.FREQUENCY_THRESHOLD_DAYS
     ) {
-      return FeedPage.FAST_FEED_HALF_LIFE_DAYS;
+      return this.FAST_FEED_HALF_LIFE_DAYS;
     }
 
     // For slower feeds, use longer half-life
-    return FeedPage.SLOW_FEED_HALF_LIFE_DAYS;
+    return this.SLOW_FEED_HALF_LIFE_DAYS;
   }
 
   /**
@@ -160,7 +171,7 @@ export class FeedPage {
    * Returns 0 if insufficient data.
    */
   private getAveragePublishingInterval(articles: Article[]): number {
-    if (!articles || articles.length < FeedPage.MIN_ARTICLES_FOR_FREQUENCY) {
+    if (!articles || articles.length < this.MIN_ARTICLES_FOR_FREQUENCY) {
       return 0;
     }
 
