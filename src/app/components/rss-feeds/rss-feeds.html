@@ -1,233 +1,239 @@
 <div class="max-w-4xl mx-auto p-6">
   <div class="flex justify-between items-center mb-6">
     @if (!isCreating() && !editingFeed()) {
-    <button
-      (click)="startCreating()"
-      class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
-    >
-      <i class="eva eva-plus" style="font-size: larger"></i>
-      Add New Feed
-    </button>
+      <button
+        (click)="startCreating()"
+        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+      >
+        <i class="eva eva-plus" style="font-size: larger"></i>
+        Add New Feed
+      </button>
     }
   </div>
 
   <!-- Success Message -->
-  @if(success()) {
-  <div
-    class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-3 rounded-lg mb-6"
-  >
-    <div class="flex items-center gap-2">
-      <i class="eva eva-checkmark-circle-2" style="font-size: larger"></i>
-      {{ success() }}
+  @if (success()) {
+    <div
+      class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-3 rounded-lg mb-6"
+    >
+      <div class="flex items-center gap-2">
+        <i class="eva eva-checkmark-circle-2" style="font-size: larger"></i>
+        {{ success() }}
+      </div>
     </div>
-  </div>
   }
 
   <!-- Error Message -->
   @if (error()) {
-  <div
-    class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-6"
-  >
-    <div class="flex items-center gap-2">
-      <i class="eva eva-close-circle" style="font-size: larger"></i>
-      {{ error() }}
+    <div
+      class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-6"
+    >
+      <div class="flex items-center gap-2">
+        <i class="eva eva-close-circle" style="font-size: larger"></i>
+        {{ error() }}
+      </div>
     </div>
-  </div>
   }
 
   <!-- Create/Edit Form -->
   @if (isCreating() || editingFeed()) {
-  <div class="bg-main rounded-lg shadow-md p-6 mb-6 border border-main">
-    <h2 class="text-xl font-semibold mb-4 text-main">
-      {{ editingFeed() ? "Edit RSS Feed" : "Add New RSS Feed" }}
-    </h2>
+    <div class="bg-main rounded-lg shadow-md p-6 mb-6 border border-main">
+      <h2 class="text-xl font-semibold mb-4 text-main">
+        {{ editingFeed() ? "Edit RSS Feed" : "Add New RSS Feed" }}
+      </h2>
 
-    <form
-      [formGroup]="feedForm"
-      (ngSubmit)="saveFeed()"
-      (keydown.escape)="cancelForm()"
-    >
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <!-- Name Field -->
-        <div>
-          <label for="name" class="block text-sm font-medium text-main mb-1">
-            Feed Name *
-          </label>
-          <input
-            type="text"
-            id="name"
-            formControlName="name"
-            placeholder="example.com"
-            class="w-full px-3 py-2 bg-main border border-main text-main rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent form-input"
-            [class.error-border]="getFieldError('name')"
-          />
-          @if (getFieldError('name')) {
-          <p class="text-red-500 text-sm mt-1">
-            {{ getFieldError("name") }}
-          </p>
-          }
+      <form
+        [formGroup]="feedForm"
+        (ngSubmit)="saveFeed()"
+        (keydown.escape)="cancelForm()"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <!-- Name Field -->
+          <div>
+            <label for="name" class="block text-sm font-medium text-main mb-1">
+              Feed Name *
+            </label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              placeholder="example.com"
+              class="w-full px-3 py-2 bg-main border border-main text-main rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent form-input"
+              [class.error-border]="getFieldError('name')"
+            />
+            @if (getFieldError("name")) {
+              <p class="text-red-500 text-sm mt-1">
+                {{ getFieldError("name") }}
+              </p>
+            }
+          </div>
+
+          <!-- URL Field -->
+          <div>
+            <label for="url" class="block text-sm font-medium text-main mb-1">
+              Feed URL *
+            </label>
+            <input
+              type="url"
+              id="url"
+              formControlName="url"
+              placeholder="https://example.com/feed.xml"
+              class="w-full px-3 py-2 bg-main border border-main text-main rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent form-input"
+              [class.error-border]="getFieldError('url')"
+            />
+            @if (getFieldError("url")) {
+              <p class="text-red-500 text-sm mt-1">
+                {{ getFieldError("url") }}
+              </p>
+            }
+          </div>
         </div>
 
-        <!-- URL Field -->
-        <div>
-          <label for="url" class="block text-sm font-medium text-main mb-1">
-            Feed URL *
-          </label>
-          <input
-            type="url"
-            id="url"
-            formControlName="url"
-            placeholder="https://example.com/feed.xml"
-            class="w-full px-3 py-2 bg-main border border-main text-main rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent form-input"
-            [class.error-border]="getFieldError('url')"
-          />
-          @if (getFieldError('url')) {
-          <p class="text-red-500 text-sm mt-1">
-            {{ getFieldError("url") }}
-          </p>
-          }
+        <!-- Form Actions -->
+        <div class="flex gap-3">
+          <button
+            type="submit"
+            [disabled]="loading()"
+            class="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+          >
+            @if (loading()) {
+              <i
+                class="eva eva-loader-outline animate-spin"
+                style="font-size: larger"
+              ></i>
+            }
+
+            {{ editingFeed() ? "Update Feed" : "Add Feed" }}
+          </button>
+          <button
+            type="button"
+            (click)="cancelForm()"
+            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+          >
+            Cancel
+          </button>
         </div>
-      </div>
-
-      <!-- Form Actions -->
-      <div class="flex gap-3">
-        <button
-          type="submit"
-          [disabled]="loading()"
-          class="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
-        >
-          @if (loading()) {
-          <i
-            class="eva eva-loader-outline animate-spin"
-            style="font-size: larger"
-          ></i>
-          }
-
-          {{ editingFeed() ? "Update Feed" : "Add Feed" }}
-        </button>
-        <button
-          type="button"
-          (click)="cancelForm()"
-          class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
-        >
-          Cancel
-        </button>
-      </div>
-    </form>
-  </div>
+      </form>
+    </div>
   }
 
   <!-- Loading State -->
   @if (loading() && feeds().length === 0) {
-  <div class="text-center py-8">
-    <i
-      class="eva eva-loader-outline animate-spin mx-auto text-red-500"
-      style="font-size: x-large"
-    ></i>
-    <p class="text-gray-600 mt-2">Loading RSS feeds...</p>
-  </div>
+    <div class="text-center py-8">
+      <i
+        class="eva eva-loader-outline animate-spin mx-auto text-red-500"
+        style="font-size: x-large"
+      ></i>
+      <p class="text-gray-600 mt-2">Loading RSS feeds...</p>
+    </div>
   }
 
   <!-- Empty State -->
   @if (!loading() && feeds().length === 0 && !isCreating()) {
-  <div class="text-center py-12">
-    <i
-      class="eva eva-radio mx-auto text-gray-400 mb-4"
-      style="font-size: x-large"
-    ></i>
-    <h3 class="text-lg font-medium text-gray-900 mb-2">No RSS feeds found</h3>
-    <p class="text-gray-600 mb-4">Get started by adding your first RSS feed.</p>
-    <button
-      (click)="startCreating()"
-      class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
-    >
-      Add Your First Feed
-    </button>
-  </div>
+    <div class="text-center py-12">
+      <i
+        class="eva eva-radio mx-auto text-gray-400 mb-4"
+        style="font-size: x-large"
+      ></i>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">No RSS feeds found</h3>
+      <p class="text-gray-600 mb-4">
+        Get started by adding your first RSS feed.
+      </p>
+      <button
+        (click)="startCreating()"
+        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+      >
+        Add Your First Feed
+      </button>
+    </div>
   }
 
   <!-- Feeds List -->
   @if (feeds().length > 0) {
-  <div class="space-y-4">
-    @for (feed of feeds(); track feed.id) {
-    <div
-      class="bg-main rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200 feed-card border border-main"
-    >
-      <div class="flex justify-between items-start">
-        <div class="flex-1">
-          <h3 class="text-lg font-semibold text-main mb-2">
-            {{ feed.name }}
-          </h3>
-          <p class="text-soft text-sm break-all url-text">{{ feed.url }}</p>
-        </div>
+    <div class="space-y-4">
+      @for (feed of feeds(); track feed.id) {
+        <div
+          class="bg-main rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200 feed-card border border-main"
+        >
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-main mb-2">
+                {{ feed.name }}
+              </h3>
+              <p class="text-soft text-sm break-all url-text">{{ feed.url }}</p>
+            </div>
 
-        <div class="flex gap-2 ml-4">
-          <button
-            (click)="startEditing(feed)"
-            class="p-2 text-soft hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors duration-200 flex items-center justify-center"
-            title="Edit feed"
-          >
-            <i class="eva eva-edit-2-outline" style="font-size: larger"></i>
-          </button>
+            <div class="flex gap-2 ml-4">
+              <button
+                (click)="startEditing(feed)"
+                class="p-2 text-soft hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                title="Edit feed"
+              >
+                <i class="eva eva-edit-2-outline" style="font-size: larger"></i>
+              </button>
 
-          <button
-            (click)="confirmDelete(feed.id)"
-            class="p-2 text-soft hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200 flex items-center justify-center"
-            title="Delete feed"
-          >
-            <i class="eva eva-trash-2-outline" style="font-size: larger"></i>
-          </button>
+              <button
+                (click)="confirmDelete(feed.id)"
+                class="p-2 text-soft hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                title="Delete feed"
+              >
+                <i
+                  class="eva eva-trash-2-outline"
+                  style="font-size: larger"
+                ></i>
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      }
     </div>
-    }
-  </div>
   }
 
   <!-- Delete Confirmation Modal -->
   @if (showDeleteConfirm()) {
-  <div
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modal-backdrop"
-    (click)="cancelDelete()"
-  >
     <div
-      class="bg-white rounded-lg p-6 max-w-md mx-4 modal-content"
-      (click)="$event.stopPropagation()"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modal-backdrop"
+      (click)="cancelDelete()"
     >
-      <div class="flex items-center mb-4">
-        <i
-          class="eva eva-alert-triangle text-red-600"
-          style="font-size: larger"
-        ></i>
-        <h3 class="text-lg font-semibold text-gray-900 ml-3">
-          Confirm Deletion
-        </h3>
-      </div>
-      <p class="text-gray-600 mb-6">
-        Are you sure you want to delete this RSS feed? This action cannot be
-        undone.
-      </p>
-      <div class="flex gap-3 justify-end">
-        <button
-          (click)="cancelDelete()"
-          class="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium transition-colors duration-200"
-        >
-          Cancel
-        </button>
-        <button
-          (click)="deleteFeed(showDeleteConfirm()!)"
-          [disabled]="loading()"
-          class="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
-        >
-          @if (loading()) {
+      <div
+        class="bg-white rounded-lg p-6 max-w-md mx-4 modal-content"
+        (click)="$event.stopPropagation()"
+      >
+        <div class="flex items-center mb-4">
           <i
-            class="eva eva-loader-outline animate-spin"
+            class="eva eva-alert-triangle text-red-600"
             style="font-size: larger"
           ></i>
-          } Delete Feed
-        </button>
+          <h3 class="text-lg font-semibold text-gray-900 ml-3">
+            Confirm Deletion
+          </h3>
+        </div>
+        <p class="text-gray-600 mb-6">
+          Are you sure you want to delete this RSS feed? This action cannot be
+          undone.
+        </p>
+        <div class="flex gap-3 justify-end">
+          <button
+            (click)="cancelDelete()"
+            class="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium transition-colors duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            (click)="deleteFeed(showDeleteConfirm()!)"
+            [disabled]="loading()"
+            class="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+          >
+            @if (loading()) {
+              <i
+                class="eva eva-loader-outline animate-spin"
+                style="font-size: larger"
+              ></i>
+            }
+            Delete Feed
+          </button>
+        </div>
       </div>
     </div>
-  </div>
   }
 </div>

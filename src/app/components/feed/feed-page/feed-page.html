@@ -1,62 +1,68 @@
 <div class="flex flex-col items-center justify-center gap-4 mx-4">
   @if (isLoading()) {
-  <app-loader class="py-6" />
+    <app-loader class="py-6" />
   } @else {
-  <!-- Feed list -->
-  @for (feed of feeds(); track feed.id) {
-  <div class="max-w-5xl w-full cursor-pointer" (click)="goToFeed(feed.id)">
-    <div
-      class="bg-main rounded-xl shadow-sm dark:shadow-none p-4 mx-auto w-full border border-main"
-    >
-      <div class="flex justify-between items-center mb-3">
-        <h1 class="text-lg font-bold text-main">
-          {{ feed.name }}
-        </h1>
-        <div class="flex items-center gap-2">
-          <app-pulse-indicator
-            [isActive]="hasNewArticles(feed)"
-            ariaLabel="New articles available"
-          />
-          <i
-            class="eva eva-chevron-right-outline text-soft"
-            style="font-size: x-large"
-          ></i>
+    <!-- Feed list -->
+    @for (feed of feeds(); track feed.id) {
+      <div class="max-w-5xl w-full cursor-pointer" (click)="goToFeed(feed.id)">
+        <div
+          class="bg-main rounded-xl shadow-sm dark:shadow-none p-4 mx-auto w-full border border-main"
+        >
+          <div class="flex justify-between items-center mb-3">
+            <h1 class="text-lg font-bold text-main">
+              {{ feed.name }}
+            </h1>
+            <div class="flex items-center gap-2">
+              <app-pulse-indicator
+                [isActive]="hasNewArticles(feed)"
+                ariaLabel="New articles available"
+              />
+              <i
+                class="eva eva-chevron-right-outline text-soft"
+                style="font-size: x-large"
+              ></i>
+            </div>
+          </div>
+          <div
+            class="bg-card rounded-lg w-full p-3 flex flex-col gap-2 shadow-sm"
+          >
+            @for (article of feed.articles; track article.id) {
+              <p class="font-mono text-xs truncate w-full text-soft">
+                {{ article.title }}
+              </p>
+            }
+          </div>
         </div>
       </div>
-      <div class="bg-card rounded-lg w-full p-3 flex flex-col gap-2 shadow-sm">
-        @for (article of feed.articles; track article.id) {
-        <p class="font-mono text-xs truncate w-full text-soft">
-          {{ article.title }}
-        </p>
-        }
+    } @empty {
+      <div class="py-6 flex flex-col items-center gap-4">
+        <i
+          class="eva eva-radio mx-auto text-soft"
+          style="font-size: x-large"
+        ></i>
+        <h3 class="text-lg font-medium text-soft">No feeds found</h3>
+        <button
+          (click)="goToRssFeedManagement()"
+          class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+        >
+          <i class="eva eva-plus" style="font-size: larger"></i>
+          Create your first feed
+        </button>
       </div>
-    </div>
-  </div>
-  } @empty {
-  <div class="py-6 flex flex-col items-center gap-4">
-    <i class="eva eva-radio mx-auto text-soft" style="font-size: x-large"></i>
-    <h3 class="text-lg font-medium text-soft">No feeds found</h3>
-    <button
-      (click)="goToRssFeedManagement()"
-      class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
-    >
-      <i class="eva eva-plus" style="font-size: larger"></i>
-      Create your first feed
-    </button>
-  </div>
-  }
+    }
 
-  <!-- Error message -->
-  @if (hasError()) {
-  <div class="py-4 flex flex-col items-center gap-4">
-    <p class="text-red-500">Failed to load feeds</p>
-    <button
-      (click)="loadFeeds()"
-      class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
-    >
-      <i class="eva eva-refresh" style="font-size: larger"></i>
-      Retry
-    </button>
-  </div>
-  } }
+    <!-- Error message -->
+    @if (hasError()) {
+      <div class="py-4 flex flex-col items-center gap-4">
+        <p class="text-red-500">Failed to load feeds</p>
+        <button
+          (click)="loadFeeds()"
+          class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+        >
+          <i class="eva eva-refresh" style="font-size: larger"></i>
+          Retry
+        </button>
+      </div>
+    }
+  }
 </div>
