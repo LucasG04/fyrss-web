@@ -7,7 +7,6 @@ import { RssFeed } from '../../../shared/types/rss-feed';
 import { Router } from '@angular/router';
 import { Loader } from '../../../shared/components/loader/loader';
 import { PulseIndicator } from '../../../shared/components/pulse-indicator/pulse-indicator';
-import { FeedLastReadService } from '../../../core/services/feed-last-read-service';
 import { ScrollPositionService } from '../../../core/services/scroll-position-service';
 
 interface RssFeedWithArticles extends RssFeed {
@@ -29,7 +28,6 @@ export class FeedPage {
   private readonly articleService = inject(ArticleService);
   private readonly feedService = inject(RssFeedService);
   private readonly router = inject(Router);
-  private readonly feedLastReadService = inject(FeedLastReadService);
   private readonly scrollPositionService = inject(ScrollPositionService);
 
   feeds = signal<RssFeedWithArticles[]>([]);
@@ -50,16 +48,13 @@ export class FeedPage {
   goToFeed(feedId: string): void {
     this.scrollPositionService.saveScrollPosition(this.SCROLL_POSITION_KEY);
     this.router.navigate(['/feed', feedId]);
-    this.feedLastReadService.setLastRead(feedId, new Date());
   }
 
   hasNewArticles(feed: RssFeedWithArticles): boolean {
-    const lastRead = this.feedLastReadService.getLastRead(feed.id);
-    if (!lastRead) {
-      return false;
-    }
     return feed.articles.some(
-      (article) => new Date(article.publishedAt).getTime() > lastRead.getTime()
+      (article) =>
+        new Date(article.publishedAt).getTime() >
+        new Date(feed.lastReadAt).getTime()
     );
   }
 

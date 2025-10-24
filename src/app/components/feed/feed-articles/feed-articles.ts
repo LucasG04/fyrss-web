@@ -32,7 +32,10 @@ export class FeedArticles {
     }
 
     firstValueFrom(this.rssFeedService.getById(feedId))
-      .then((feed) => this.rssFeed.set(feed))
+      .then((feed) => {
+        this.rssFeed.set(feed);
+        firstValueFrom(this.rssFeedService.setLastReadToNow(feedId));
+      })
       .catch((err) => {
         console.error('Error loading feed:', err);
         this.rssFeed.set(null);

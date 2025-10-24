@@ -31,4 +31,8 @@ export class RssFeedService {
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/feeds/${id}`);
   }
+
+  setLastReadToNow(feedId: string): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/feeds/${feedId}/read`, {});
+  }
 }
