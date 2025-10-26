@@ -3,14 +3,14 @@
 >
   <div class="flex justify-between items-center gap-2">
     <h2
-      class="text-xl font-bold"
+      class="text-xl font-bold flex-1 min-w-0 break-words"
       [class.text-main]="!hasLastReadAt()"
       [class.text-soft]="hasLastReadAt()"
     >
       {{ article().title }}
     </h2>
     <button
-      class="bg-card bg-card-hover transition-colors rounded-full p-2 flex items-center justify-center"
+      class="bg-card bg-card-hover transition-colors rounded-full p-2 flex items-center justify-center shrink-0"
       title="Save"
       (click)="updateArticleSaved()"
     >
